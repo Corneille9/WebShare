@@ -3,6 +3,7 @@ import sys
 
 from kivy.animation import Animation
 from kivy.lang import Builder
+from kivy.properties import StringProperty
 from kivy.utils import get_color_from_hex
 from kivymd.app import MDApp
 from kivymd.uix.behaviors import TouchBehavior
@@ -11,11 +12,13 @@ from kivymd.uix.list import TwoLineAvatarListItem
 # 16.75
 from kivymd.uix.selectioncontrol import MDCheckbox
 
+from app.utils.utilities import get_file_icon
+
 KV = '''
 #:import MagicBehavior kivymd.uix.behaviors.MagicBehavior
 
 <MyItem>
-    source: "data/logo/kivy-icon-256.png"
+    source: "file.png"
     ImageLeftWidget:
         source: root.source
         
@@ -26,7 +29,7 @@ MDBoxLayout:
         id: toolbar
         left_action_items: [["menu"]]
         right_action_items: [["magnify"], ["dots-vertical"], ]
-        md_bg_color: 0, 0, 0, 1            
+        md_bg_color: 0, 0, 0, 1   
 
     MDBoxLayout:
         id: box
@@ -40,6 +43,14 @@ MDBoxLayout:
             font_name: 'Kanit-SemiBold.ttf'
             pos_hint: {'center_x': .5, 'center_y': .5}
             
+        MDLabel:
+            padding: "20dp", "0dp"
+            bold: True
+            text: "Tout Cocher"
+            adaptive_size: True
+            font_name: 'Kanit-SemiBold.ttf'
+            pos_hint: {'center_x': .9, 'center_y': .5}
+                
         MDCheckbox:
             size_hint: None, None
             size: "48dp", "48dp"
@@ -61,6 +72,7 @@ MDBoxLayout:
 class MyItem(TwoLineAvatarListItem):
     def __init__(self, path, **kwargs):
         super().__init__(**kwargs)
+        self.source = get_file_icon(path)
         self.path = path
         self.text = ntpath.basename(path)
         self.secondary_text = path
