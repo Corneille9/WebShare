@@ -2,10 +2,12 @@ import ntpath
 import sys
 
 from kivy.animation import Animation
+from kivy.factory import Factory
 from kivy.lang import Builder
 from kivy.utils import get_color_from_hex
 from kivymd.app import MDApp
 from kivymd.uix.behaviors import TouchBehavior
+from kivymd.uix.bottomsheet import MDCustomBottomSheet
 from kivymd.uix.button import MDFillRoundFlatButton
 from kivymd.uix.list import TwoLineAvatarListItem
 # 16.75
@@ -65,6 +67,29 @@ MDBoxLayout:
             on_selected: app.on_selected(*args)
             on_unselected: app.on_unselected(*args)
             on_selected_mode: app.set_selection_mode(*args)
+            
+    MDBottomAppBar:
+        height: 10
+    
+        MDToolbar:
+            md_bg_color: 0, 0, 0, 1   
+            left_action_items: [["router-network", lambda x: app.show_custom_bottom_sheet(), "Paramètres du server"]]       
+                                         
+          
+<ContentCustomSheet@BoxLayout>:
+    orientation: "vertical"
+    size_hint_y: None
+    height: "400dp"
+
+    MDToolbar:
+        title: 'Paramètres du server'
+
+    ScrollView:
+
+        MDGridLayout:
+            cols: 2
+            adaptive_height: True                 
+            
 '''
 
 
@@ -86,8 +111,11 @@ class MyItem(TwoLineAvatarListItem):
 
 
 class AppInstaller(MDApp):
-    overlay_color = get_color_from_hex("#6042e4")
-    files = []
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.overlay_color = get_color_from_hex("#6042e4")
+        self.files = []
+        self.custom_sheet = None
 
     def add_files(self, file_path):
         for path in file_path:
@@ -100,6 +128,10 @@ class AppInstaller(MDApp):
 
     def on_start(self):
         self.root.ids.toolbar.add_widget(MyButton(self))
+
+    def show_custom_bottom_sheet(self):
+        self.custom_sheet = MDCustomBottomSheet(screen=Factory.ContentCustomSheet())
+        self.custom_sheet.open()
 
     def set_selection_mode(self, instance_selection_list, mode):
         if mode:

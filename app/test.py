@@ -1,8 +1,4 @@
-import os
-from pathlib import Path
-
-from app.utils.utilities import get_file_icon
-
-get_file_icon("res/app/tab.exe")
-
-print(str(Path(__file__).resolve().parent))
+import socket
+s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+s.connect(('8.8.8.8', 80))
+print(socket.gethostname())
