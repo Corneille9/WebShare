@@ -18,8 +18,7 @@ def predict():
     pass
 
 
-"""ssl_context="adhoc"""
-if __name__ == "__main__":
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    s.connect(('8.8.8.8', 80))
-    app.run(host=s.getsockname()[0], port=80, debug=True)
+def run_server():
+    # s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    # s.connect(('8.8.8.8', 80))
+    app.run(host=socket.gethostname(), port=80, debug=True)

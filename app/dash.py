@@ -1,95 +1,159 @@
 import ntpath
+import socket
 import sys
 
 from kivy.animation import Animation
 from kivy.factory import Factory
 from kivy.lang import Builder
+from kivy.properties import StringProperty
 from kivy.utils import get_color_from_hex
 from kivymd.app import MDApp
 from kivymd.uix.behaviors import TouchBehavior
 from kivymd.uix.bottomsheet import MDCustomBottomSheet
+from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDFillRoundFlatButton
 from kivymd.uix.list import TwoLineAvatarListItem
 # 16.75
-from kivymd.uix.selectioncontrol import MDCheckbox
+from kivymd.uix.selectioncontrol import MDCheckbox, MDSwitch
 
 from app.utils.utilities import get_file_icon, get_icon_dir
+from web.app import app, run_server
 
 KV = '''
 #:import MagicBehavior kivymd.uix.behaviors.MagicBehavior
+
+<ContentNavigationDrawer>:
+    nav_drawer: root.nav_drawer
+            
+    ScrollView:
+
+        MDList:
+            OneLineAvatarIconListItem:
+                text: "Mode nuit"
+                _no_ripple_effect: True     
+                divider: "Inset"             
+                
+                IconLeftWidget:
+                    icon:"theme-light-dark"
+                    
+                RightCheckbox:   
+                    pos_hint: {"center_x": .9, "center_y": .5}    
+                    on_active: app.change_theme()
+
+
+            OneLineAvatarIconListItem:
+                text: "Aide"
+                divider: "Inset"
+                
+                IconLeftWidget:
+                    icon:"help"
+                
+            OneLineAvatarIconListItem:
+                text: "Quitter" 
+                divider: "Inset"
+                
+                IconLeftWidget:
+                    icon:"exit-to-app"                          
+           
 
 <MyItem>
     source: "file.png"
     ImageLeftWidget:
         source: root.source
-        
-MDBoxLayout:
-    orientation: "vertical"
 
-    MDToolbar:
-        id: toolbar
-        left_action_items: [["menu"]]
-        right_action_items: [["magnify"], ["dots-vertical"], ]
-        md_bg_color: 0, 0, 0, 1   
-
-    MDBoxLayout:
-        id: box
-        padding: "24dp", "8dp", 0, "8dp"
-        adaptive_size: True
-
-        MDLabel:
-            bold: True
-            text: "Application list"
-            adaptive_size: True
-            font_name: 'Kanit-SemiBold.ttf'
-            pos_hint: {'center_x': .5, 'center_y': .5}
-            
-        MDLabel:
-            padding: "20dp", "0dp"
-            bold: True
-            text: "Tout Cocher"
-            adaptive_size: True
-            font_name: 'Kanit-SemiBold.ttf'
-            pos_hint: {'center_x': .9, 'center_y': .5}
-                
-        MDCheckbox:
-            size_hint: None, None
-            size: "48dp", "48dp"
-            pos_hint: {'center_x': .5, 'center_y': .5}    
-            
-    ScrollView:
-
-        MDSelectionList:
-            id: selection_list
-            spacing: "12dp"
-            overlay_color: app.overlay_color[:-1] + [.2]
-            icon_bg_color: app.overlay_color
-            on_selected: app.on_selected(*args)
-            on_unselected: app.on_unselected(*args)
-            on_selected_mode: app.set_selection_mode(*args)
-            
-    MDBottomAppBar:
-        height: 10
+MDNavigationLayout:   
     
+    ScreenManager:
+    
+        MDScreen: 
+        
+            MDBoxLayout:
+                orientation: "vertical"
+        
+                MDToolbar:
+                    id: toolbar
+                    left_action_items: [["menu", lambda x: nav_drawer.set_state("open"), "Menu"]]
+                    right_action_items: [["magnify"], ["dots-vertical"], ]
+                    md_bg_color: 0, 0, 0, 1   
+            
+                MDBoxLayout:
+                    id: box
+                    padding: "24dp", "8dp", 0, "8dp"
+                    adaptive_size: True
+            
+                    MDLabel:
+                        bold: True
+                        text: "Application list"
+                        adaptive_size: True
+                        font_name: 'Kanit-SemiBold.ttf'
+                        pos_hint: {'center_x': .5, 'center_y': .5}
+                        
+                    MDLabel:
+                        padding: "20dp", "0dp"
+                        bold: True
+                        text: "Tout Cocher"
+                        adaptive_size: True
+                        font_name: 'Kanit-SemiBold.ttf'
+                        pos_hint: {'center_x': .9, 'center_y': .5}
+                            
+                    MDCheckbox:
+                        size_hint: None, None
+                        size: "48dp", "48dp"
+                        pos_hint: {'center_x': .5, 'center_y': .5}    
+                        
+                ScrollView:
+            
+                    MDSelectionList:
+                        id: selection_list
+                        spacing: "12dp"
+                        overlay_color: app.overlay_color[:-1] + [.2]
+                        icon_bg_color: app.overlay_color
+                        on_selected: app.on_selected(*args)
+                        on_unselected: app.on_unselected(*args)
+                        on_selected_mode: app.set_selection_mode(*args)
+                 
+                MDBottomAppBar:
+                    height: 10
+                    md_bg_color: 0, 0, 0, 1 
+                
+                    MDToolbar:
+                        icon: "git"
+                        type: "bottom"
+                        on_action_button:app.run_server()
+                        icon_color: 0, 0, 0, 1
+                        left_action_items: [["router-network", lambda x: app.show_custom_bottom_sheet(), "Paramètres du server"]]       
+                
+    MDNavigationDrawer:
+        id: nav_drawer
+        orientation:"vertical"
+                
         MDToolbar:
-            md_bg_color: 0, 0, 0, 1   
-            left_action_items: [["router-network", lambda x: app.show_custom_bottom_sheet(), "Paramètres du server"]]       
-                                         
+            title: 'Tiny Share'
+            elevation: 10    
+            md_bg_color: 0, 0, 0, 1  
+            
+        ContentNavigationDrawer:  
+            nav_drawer: nav_drawer                                    
           
 <ContentCustomSheet@BoxLayout>:
     orientation: "vertical"
     size_hint_y: None
-    height: "400dp"
-
-    MDToolbar:
-        title: 'Paramètres du server'
+    height: "200dp"
 
     ScrollView:
-
-        MDGridLayout:
-            cols: 2
-            adaptive_height: True                 
-            
+        MDBoxLayout:
+            orientation: "vertical"
+            MDBoxLayout
+                orientation: "horizontal"
+                MDLabel:
+                    padding: "20dp", "0dp"
+                    bold: True
+                    text: "Url :           http://192.168.43.214/SharedFiles"
+                    adaptive_size: True
+                    font_name: 'Kanit-SemiBold.ttf'
+                    pos_hint: {'center_x': .9, 'center_y': .5}
+                    
+       
 '''
 
 
@@ -127,11 +191,25 @@ class AppInstaller(MDApp):
         return Builder.load_string(KV)
 
     def on_start(self):
-        self.root.ids.toolbar.add_widget(MyButton(self))
+        self.root.ids.nav_drawer.set_state("close")
+        btn = MyButton(self)
+        self.root.ids.toolbar.add_widget(btn)
+        anim = Animation(size=(30, 30), t="in_quad", )
+        anim.repeat = True
+        anim.start(btn)
+
+    def run_server(self):
+        run_server()
 
     def show_custom_bottom_sheet(self):
-        self.custom_sheet = MDCustomBottomSheet(screen=Factory.ContentCustomSheet())
+        self.custom_sheet = MDCustomBottomSheet(screen=Factory.ContentCustomSheet(), radius_from="top")
         self.custom_sheet.open()
+
+    def change_theme(self):
+        if self.theme_cls.theme_style == "Light":
+            self.theme_cls.theme_style = "Dark"
+        elif self.theme_cls.theme_style == "Dark":
+            self.theme_cls.theme_style = "Light"
 
     def set_selection_mode(self, instance_selection_list, mode):
         if mode:
@@ -178,7 +256,7 @@ class AppInstaller(MDApp):
 
 
 class MyButton(MDFillRoundFlatButton, TouchBehavior):
-    def __init__(self, app, **kwargs):
+    def __init__(self, app=None, **kwargs):
         super().__init__(**kwargs)
         self.app = app
         self._radius = 6
@@ -207,4 +285,12 @@ class MyButton(MDFillRoundFlatButton, TouchBehavior):
     def on_triple_tap(self, touch, *args):
         print("<on_triple_tap> event")
 
+
+class ContentNavigationDrawer(MDBoxLayout):
+    icon = StringProperty()
+    pass
+
+
+class RightCheckbox(MDSwitch):
+    pass
 # https://www.youtube.com/watch?v=NZde8Xt78Iw
