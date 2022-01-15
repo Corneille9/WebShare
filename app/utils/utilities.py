@@ -1,3 +1,6 @@
+from pathlib import Path
+
+
 def get_file_icon(path):
     pos = path[::-1].find(".")
     if pos != -1:
@@ -20,6 +23,10 @@ def get_file_icon(path):
     return icon_dict.get("unknown")
 
 
+def get_icon_dir():
+    return str(Path(__file__).resolve().parent.parent) + "\\res\\icon\\"
+
+
 extension_box = {
     "images": ["png", "jpg", "jpeg", "gif", "bmp", "webp", "ico"],
     "videos": ["mp4", "mov", "mkv", "avi", "webm"],
@@ -32,13 +39,13 @@ extension_box = {
 }
 
 icon_dict = {
-    "images": "app/res/icon/Image.png",
-    "videos": "app/res/icon/Video.png",
-    "musics": "app/res/icon/Music.png",
-    "pdf": "app/res/icon/Unknown.png",
-    "document": "app/res/icon/Document.png",
-    "word": "app/res/icon/Word.png",
-    "powerPoint": "app/res/icon/PowerPoint.png",
-    "unknown": "app/res/icon/Unknown.png",
-    "archive": "app/res/icon/Zip.png",
+    "images": "Image.png",
+    "videos": "Video.png",
+    "musics": "Music.png",
+    "pdf": "Unknown.png",
+    "document": "Document.png",
+    "word": "Word.png",
+    "powerPoint": "PowerPoint.png",
+    "unknown": "Unknown.png",
+    "archive": "Zip.png",
 }

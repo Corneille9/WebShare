@@ -3,7 +3,6 @@ import sys
 
 from kivy.animation import Animation
 from kivy.lang import Builder
-from kivy.properties import StringProperty
 from kivy.utils import get_color_from_hex
 from kivymd.app import MDApp
 from kivymd.uix.behaviors import TouchBehavior
@@ -12,7 +11,7 @@ from kivymd.uix.list import TwoLineAvatarListItem
 # 16.75
 from kivymd.uix.selectioncontrol import MDCheckbox
 
-from app.utils.utilities import get_file_icon
+from app.utils.utilities import get_file_icon, get_icon_dir
 
 KV = '''
 #:import MagicBehavior kivymd.uix.behaviors.MagicBehavior
@@ -72,7 +71,7 @@ MDBoxLayout:
 class MyItem(TwoLineAvatarListItem):
     def __init__(self, path, **kwargs):
         super().__init__(**kwargs)
-        self.source = get_file_icon(path)
+        self.source = get_icon_dir() + get_file_icon(path)
         self.path = path
         self.text = ntpath.basename(path)
         self.secondary_text = path
@@ -93,7 +92,7 @@ class AppInstaller(MDApp):
     def add_files(self, file_path):
         for path in file_path:
             self.files.append(path)
-            self.root.ids.selection_list.add_widget(MyItem(path))
+            self.root.ids.selection_list.add_widget(MyItem(path=path))
 
     def build(self):
         self.theme_cls.theme_style = "Dark"
