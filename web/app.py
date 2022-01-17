@@ -1,24 +1,24 @@
 import socket
 
-from flask import Flask, render_template
-from flask_talisman import Talisman
-
-app = Flask(__name__)
-
-Talisman(app)
+from quart import Quart, render_template
 
 
-@app.route('/')
-def home():
-    return render_template('errors/404.html')
+class SharedFiles:
+    def __init__(self, mdapp):
+        self.app = Quart(__name__)
+        self.mdApp = mdapp
+        self.host = socket.gethostname()
+        self.port = 80
+        self.route()
 
+    def route(self):
+        @self.app.route('/')
+        async def index():
+            return await render_template('index.html')
 
-@app.route('/predict', methods=['POST'])
-def predict():
-    pass
+        @self.app.route('/isConnected')
+        async def isConnected():
+            return 'true'
 
-
-def run_server():
-    # s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    # s.connect(('8.8.8.8', 80))
-    app.run(host=socket.gethostname(), port=80, debug=True)
+    def run(self):
+        return self.app.run_task(host=self.host, port=self.port, debug=True)

@@ -1,4 +1,9 @@
-import socket
-s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-s.connect(('8.8.8.8', 80))
-print(socket.gethostname())
+import asyncio
+
+from web.app import SharedFiles
+
+sha = SharedFiles("dsd")
+
+loop = asyncio.get_event_loop()
+loop.run_until_complete(sha.run())
+loop.close()

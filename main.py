@@ -1,7 +1,8 @@
-from multiprocessing import Process
+import asyncio
 
 from app.dash import AppInstaller
-from web.app import run_server
 
 if __name__ == "__main__":
-    AppInstaller().run()
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(AppInstaller().app_func())
+    loop.close()

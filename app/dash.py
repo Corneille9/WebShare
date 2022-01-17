@@ -1,3 +1,4 @@
+import asyncio
 import ntpath
 import socket
 import sys
@@ -5,6 +6,7 @@ import sys
 from kivy.animation import Animation
 from kivy.factory import Factory
 from kivy.lang import Builder
+from kivy.network.urlrequest import UrlRequest
 from kivy.properties import StringProperty
 from kivy.utils import get_color_from_hex
 from kivymd.app import MDApp
@@ -15,9 +17,10 @@ from kivymd.uix.button import MDFillRoundFlatButton
 from kivymd.uix.list import TwoLineAvatarListItem
 # 16.75
 from kivymd.uix.selectioncontrol import MDCheckbox, MDSwitch
+from kivymd.uix.toolbar import MDToolbar
 
 from app.utils.utilities import get_file_icon, get_icon_dir
-from web.app import app, run_server
+from web.app import SharedFiles
 
 KV = '''
 #:import MagicBehavior kivymd.uix.behaviors.MagicBehavior
@@ -117,9 +120,10 @@ MDNavigationLayout:
                     md_bg_color: 0, 0, 0, 1 
                 
                     MDToolbar:
+                        id: bottom_toolbar
                         icon: "git"
                         type: "bottom"
-                        on_action_button:app.run_server()
+                        on_action_button: app.on_float_button_click(self)
                         icon_color: 0, 0, 0, 1
                         left_action_items: [["router-network", lambda x: app.show_custom_bottom_sheet(), "Paramètres du server"]]       
                 
@@ -180,6 +184,8 @@ class AppInstaller(MDApp):
         self.overlay_color = get_color_from_hex("#6042e4")
         self.files = []
         self.custom_sheet = None
+        self.other_task = None
+        self.sharedFiles = SharedFiles(self)
 
     def add_files(self, file_path):
         for path in file_path:
@@ -190,16 +196,42 @@ class AppInstaller(MDApp):
         self.theme_cls.theme_style = "Dark"
         return Builder.load_string(KV)
 
+    def app_func(self):
+        self.other_task = asyncio.ensure_future(self.waste_time_freely())
+
+        async def run_wrapper():
+            # we don't actually need to set asyncio as the lib because it is
+            # the default, but it doesn't hurt to be explicit
+            await self.async_run(async_lib='asyncio')
+            print('App done')
+            self.other_task.cancel()
+
+        return asyncio.gather(run_wrapper(), self.other_task)
+
+    async def waste_time_freely(self):
+        try:
+            await (self.sharedFiles.run())
+        except asyncio.CancelledError as e:
+            print('Wasting time was canceled', e)
+        finally:
+            print('Done wasting time')
+
     def on_start(self):
         self.root.ids.nav_drawer.set_state("close")
         btn = MyButton(self)
         self.root.ids.toolbar.add_widget(btn)
-        anim = Animation(size=(30, 30), t="in_quad", )
-        anim.repeat = True
-        anim.start(btn)
 
-    def run_server(self):
-        run_server()
+    def on_float_button_click(self, button):
+        button.action_button.disabled = True
+
+        def on_sccss(requests, result):
+            button.action_button.disabled = False
+            print(result)
+
+        def on_fail(requests, result):
+            button.action_button.disabled = False
+
+        UrlRequest("http://" + self.sharedFiles.host + "/isConnected", on_success=on_sccss, on_failure=on_fail, on_error=on_fail)
 
     def show_custom_bottom_sheet(self):
         self.custom_sheet = MDCustomBottomSheet(screen=Factory.ContentCustomSheet(), radius_from="top")
