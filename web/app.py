@@ -20,5 +20,13 @@ class SharedFiles:
         async def isConnected():
             return 'true'
 
+        @self.app.errorhandler(404)
+        async def error_404(error):
+            return await render_template("errors/404.html")
+
+        @self.app.errorhandler(500)
+        async def error_404(error):
+            return await render_template("errors/500.html")
+
     def run(self):
         return self.app.run_task(host=self.host, port=self.port, debug=True)
