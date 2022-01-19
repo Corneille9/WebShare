@@ -132,7 +132,7 @@ MDNavigationLayout:
         orientation:"vertical"
                 
         MDToolbar:
-            title: 'Tiny Share'
+            title: 'WebShare'
             elevation: 10    
             md_bg_color: 0, 0, 0, 1  
             
@@ -178,18 +178,17 @@ class MyItem(TwoLineAvatarListItem):
         self.add_widget(self.check)
 
 
-class AppInstaller(MDApp):
+class WebShare(MDApp):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.overlay_color = get_color_from_hex("#6042e4")
-        self.files = []
         self.custom_sheet = None
         self.other_task = None
         self.sharedFiles = SharedFiles(self)
 
     def add_files(self, file_path):
         for path in file_path:
-            self.files.append(path)
+            self.sharedFiles.files.append(path)
             self.root.ids.selection_list.add_widget(MyItem(path=path))
 
     def build(self):
