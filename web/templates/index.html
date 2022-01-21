@@ -8,6 +8,7 @@
     <meta name="theme-color" content="#ffffff">
     <script src="{{ url_for('static', filename='assets/js/config.js') }}"></script>
     <script src="{{ url_for('static', filename='vendors/overlayscrollbars/OverlayScrollbars.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendors/plyr/plyr.css') }}"></script>
 
     <!-- ===============================================-->
     <!--    Stylesheets-->
@@ -15,6 +16,7 @@
     <link href="{{ url_for('static', filename='vendors/prism/prism-okaidia.css') }}" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.gstatic.com/">
     <link href="{{ url_for('static', filename='vendors/overlayscrollbars/OverlayScrollbars.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='vendors/glightbox/glightbox.min.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='assets/css/theme-rtl.min.css') }}" rel="stylesheet" id="style-rtl">
     <link href="{{ url_for('static', filename='assets/css/theme.min.css') }}" rel="stylesheet" id="style-default">
     <link href="{{ url_for('static', filename='assets/css/user-rtl.min.css') }}" rel="stylesheet" id="user-style-rtl">
@@ -111,7 +113,8 @@
             <ul class="navbar-nav" data-top-nav-dropdowns="data-top-nav-dropdowns">
               <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="dashboards">Dashboard</a>
                 <div class="dropdown-menu dropdown-menu-card border-0 mt-0" aria-labelledby="dashboards">
-                  <div class="bg-white dark__bg-1000 rounded-3 py-2"><a class="dropdown-item link-600 fw-medium" href="../../index.html">Default</a><a class="dropdown-item link-600 fw-medium" href="../../dashboard/analytics.html">Analytics</a><a class="dropdown-item link-600 fw-medium" href="../../dashboard/crm.html">CRM</a><a class="dropdown-item link-600 fw-medium" href="../../dashboard/e-commerce.html">E commerce</a><a class="dropdown-item link-600 fw-medium" href="../../dashboard/project-management.html">Management</a><a class="dropdown-item link-600 fw-medium" href="../../dashboard/saas.html">SaaS</a></div>
+                  <div class="bg-white dark__bg-1000 rounded-3 py-2"><a class="dropdown-item link-600 fw-medium" href="../../index.html">Default</a>
+                    <a class="dropdown-item link-600 fw-medium" href="../../dashboard/analytics.html">Analytics</a>
                 </div>
               </li>
               <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="apps">App</a>
@@ -135,96 +138,7 @@
             <li class="nav-item">
               <div class="theme-control-toggle fa-icon-wait px-2"><input class="form-check-input ms-0 theme-control-toggle-input" id="themeControlToggle" type="checkbox" data-theme-control="theme" value="dark" /><label class="mb-0 theme-control-toggle-label theme-control-toggle-light" for="themeControlToggle" data-bs-toggle="tooltip" data-bs-placement="left" title="Switch to light theme"><span class="fas fa-sun fs-0"></span></label><label class="mb-0 theme-control-toggle-label theme-control-toggle-dark" for="themeControlToggle" data-bs-toggle="tooltip" data-bs-placement="left" title="Switch to dark theme"><span class="fas fa-moon fs-0"></span></label></div>
             </li>
-            <li class="nav-item">
-              <a class="nav-link px-0 notification-indicator notification-indicator-warning notification-indicator-fill fa-icon-wait" href="../../app/e-commerce/shopping-cart.html"><span class="fas fa-shopping-cart" data-fa-transform="shrink-7" style="font-size: 33px;"></span><span class="notification-indicator-number">1</span></a>
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link notification-indicator notification-indicator-primary px-0 fa-icon-wait" id="navbarDropdownNotification" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="fas fa-bell" data-fa-transform="shrink-6" style="font-size: 33px;"></span></a>
-              <div class="dropdown-menu dropdown-menu-end dropdown-menu-card dropdown-menu-notification" aria-labelledby="navbarDropdownNotification">
-                <div class="card card-notification shadow-none">
-                  <div class="card-header">
-                    <div class="row justify-content-between align-items-center">
-                      <div class="col-auto">
-                        <h6 class="card-header-title mb-0">Notifications</h6>
-                      </div>
-                      <div class="col-auto ps-0 ps-sm-3"><a class="card-link fw-normal" href="#">Mark all as read</a></div>
-                    </div>
-                  </div>
-                  <div class="scrollbar-overlay" style="max-height:19rem">
-                    <div class="list-group list-group-flush fw-normal fs--1">
-                      <div class="list-group-title border-bottom">NEW</div>
-                      <div class="list-group-item">
-                        <a class="notification notification-flush notification-unread" href="#!">
-                          <div class="notification-avatar">
-                            <div class="avatar avatar-2xl me-3">
-                              <img class="rounded-circle" src="../../assets/img/team/1-thumb.png" alt="" />
-                            </div>
-                          </div>
-                          <div class="notification-body">
-                            <p class="mb-1"><strong>Emma Watson</strong> replied to your comment : "Hello world 😍"</p>
-                            <span class="notification-time"><span class="me-2" role="img" aria-label="Emoji">💬</span>Just now</span>
-                          </div>
-                        </a>
-                      </div>
-                      <div class="list-group-item">
-                        <a class="notification notification-flush notification-unread" href="#!">
-                          <div class="notification-avatar">
-                            <div class="avatar avatar-2xl me-3">
-                              <div class="avatar-name rounded-circle"><span>AB</span></div>
-                            </div>
-                          </div>
-                          <div class="notification-body">
-                            <p class="mb-1"><strong>Albert Brooks</strong> reacted to <strong>Mia Khalifa's</strong> status</p>
-                            <span class="notification-time"><span class="me-2 fab fa-gratipay text-danger"></span>9hr</span>
-                          </div>
-                        </a>
-                      </div>
-                      <div class="list-group-title border-bottom">EARLIER</div>
-                      <div class="list-group-item">
-                        <a class="notification notification-flush" href="#!">
-                          <div class="notification-avatar">
-                            <div class="avatar avatar-2xl me-3">
-                              <img class="rounded-circle" src="../../assets/img/icons/weather-sm.jpg" alt="" />
-                            </div>
-                          </div>
-                          <div class="notification-body">
-                            <p class="mb-1">The forecast today shows a low of 20&#8451; in California. See today's weather.</p>
-                            <span class="notification-time"><span class="me-2" role="img" aria-label="Emoji">🌤️</span>1d</span>
-                          </div>
-                        </a>
-                      </div>
-                      <div class="list-group-item">
-                        <a class="border-bottom-0 notification-unread  notification notification-flush" href="#!">
-                          <div class="notification-avatar">
-                            <div class="avatar avatar-xl me-3">
-                              <img class="rounded-circle" src="../../assets/img/logos/oxford.png" alt="" />
-                            </div>
-                          </div>
-                          <div class="notification-body">
-                            <p class="mb-1"><strong>University of Oxford</strong> created an event : "Causal Inference Hilary 2019"</p>
-                            <span class="notification-time"><span class="me-2" role="img" aria-label="Emoji">✌️</span>1w</span>
-                          </div>
-                        </a>
-                      </div>
-                      <div class="list-group-item">
-                        <a class="border-bottom-0 notification notification-flush" href="#!">
-                          <div class="notification-avatar">
-                            <div class="avatar avatar-xl me-3">
-                              <img class="rounded-circle" src="../../assets/img/team/10.jpg" alt="" />
-                            </div>
-                          </div>
-                          <div class="notification-body">
-                            <p class="mb-1"><strong>James Cameron</strong> invited to join the group: United Nations International Children's Fund</p>
-                            <span class="notification-time"><span class="me-2" role="img" aria-label="Emoji">🙋‍</span>2d</span>
-                          </div>
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="card-footer text-center border-top"><a class="card-link d-block" href="../../app/social/notifications.html">View all</a></div>
-                </div>
-              </div>
-            </li>
+
             <li class="nav-item dropdown"><a class="nav-link pe-0" id="navbarDropdownUser" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <div class="avatar avatar-xl">
                   <img class="rounded-circle" src="../../assets/img/team/3-thumb.png" alt="" />
@@ -251,200 +165,11 @@
             <a class="navbar-brand me-1 me-sm-3" href="../../index.html">
               <div class="d-flex align-items-center"><img class="me-2" src="../../assets/img/icons/spot-illustrations/falcon.png" alt="" width="40" /><span class="font-sans-serif">WebShare</span></div>
             </a>
-            <ul class="navbar-nav align-items-center d-none d-lg-block">
-              <li class="nav-item">
-                <div class="search-box" data-list='{"valueNames":["title"]}'>
-                  <form class="position-relative" data-bs-toggle="search" data-bs-display="static"><input class="form-control search-input fuzzy-search" type="search" placeholder="Search..." aria-label="Search" />
-                    <span class="fas fa-search search-box-icon"></span>
-                  </form>
-                  <div class="btn-close-falcon-container position-absolute end-0 top-50 translate-middle shadow-none" data-bs-dismiss="search">
-                    <div class="btn-close-falcon" aria-label="Close"></div>
-                  </div>
-                  <div class="dropdown-menu border font-base start-0 mt-2 py-0 overflow-hidden w-100">
-                    <div class="scrollbar list py-3" style="max-height: 24rem;">
-                      <h6 class="dropdown-header fw-medium text-uppercase px-card fs--2 pt-0 pb-2">Recently Browsed</h6><a class="dropdown-item fs--1 px-card py-1 hover-primary" href="../../app/events/event-detail.html">
-                        <div class="d-flex align-items-center">
-                          <span class="fas fa-circle me-2 text-300 fs--2"></span>
-                          <div class="fw-normal title">Pages <span class="fas fa-chevron-right mx-1 text-500 fs--2" data-fa-transform="shrink-2"></span> Events</div>
-                        </div>
-                      </a>
-                      <a class="dropdown-item fs--1 px-card py-1 hover-primary" href="../../app/e-commerce/customers.html">
-                        <div class="d-flex align-items-center">
-                          <span class="fas fa-circle me-2 text-300 fs--2"></span>
-                          <div class="fw-normal title">E-commerce <span class="fas fa-chevron-right mx-1 text-500 fs--2" data-fa-transform="shrink-2"></span> Customers</div>
-                        </div>
-                      </a>
-                      <hr class="bg-200 dark__bg-900" />
-                      <h6 class="dropdown-header fw-medium text-uppercase px-card fs--2 pt-0 pb-2">Suggested Filter</h6><a class="dropdown-item px-card py-1 fs-0" href="../../app/e-commerce/customers.html">
-                        <div class="d-flex align-items-center"><span class="badge fw-medium text-decoration-none me-2 badge-soft-warning">customers:</span>
-                          <div class="flex-1 fs--1 title">All customers list</div>
-                        </div>
-                      </a>
-                      <a class="dropdown-item px-card py-1 fs-0" href="../../app/events/event-detail.html">
-                        <div class="d-flex align-items-center"><span class="badge fw-medium text-decoration-none me-2 badge-soft-success">events:</span>
-                          <div class="flex-1 fs--1 title">Latest events in current month</div>
-                        </div>
-                      </a>
-                      <a class="dropdown-item px-card py-1 fs-0" href="../../app/e-commerce/product/product-grid.html">
-                        <div class="d-flex align-items-center"><span class="badge fw-medium text-decoration-none me-2 badge-soft-info">products:</span>
-                          <div class="flex-1 fs--1 title">Most popular products</div>
-                        </div>
-                      </a>
-                      <hr class="bg-200 dark__bg-900" />
-                      <h6 class="dropdown-header fw-medium text-uppercase px-card fs--2 pt-0 pb-2">Files</h6><a class="dropdown-item px-card py-2" href="#!">
-                        <div class="d-flex align-items-center">
-                          <div class="file-thumbnail me-2"><img class="border h-100 w-100 fit-cover rounded-3" src="../../assets/img/products/3-thumb.png" alt="" /></div>
-                          <div class="flex-1">
-                            <h6 class="mb-0 title">iPhone</h6>
-                            <p class="fs--2 mb-0 d-flex"><span class="fw-semi-bold">Antony</span><span class="fw-medium text-600 ms-2">27 Sep at 10:30 AM</span></p>
-                          </div>
-                        </div>
-                      </a>
-                      <a class="dropdown-item px-card py-2" href="#!">
-                        <div class="d-flex align-items-center">
-                          <div class="file-thumbnail me-2"><img class="img-fluid" src="../../assets/img/icons/zip.png" alt="" /></div>
-                          <div class="flex-1">
-                            <h6 class="mb-0 title">Falcon v1.8.2</h6>
-                            <p class="fs--2 mb-0 d-flex"><span class="fw-semi-bold">John</span><span class="fw-medium text-600 ms-2">30 Sep at 12:30 PM</span></p>
-                          </div>
-                        </div>
-                      </a>
-                      <hr class="bg-200 dark__bg-900" />
-                      <h6 class="dropdown-header fw-medium text-uppercase px-card fs--2 pt-0 pb-2">Members</h6><a class="dropdown-item px-card py-2" href="../../pages/user/profile.html">
-                        <div class="d-flex align-items-center">
-                          <div class="avatar avatar-l status-online me-2">
-                            <img class="rounded-circle" src="../../assets/img/team/1.jpg" alt="" />
-                          </div>
-                          <div class="flex-1">
-                            <h6 class="mb-0 title">Anna Karinina</h6>
-                            <p class="fs--2 mb-0 d-flex">Technext Limited</p>
-                          </div>
-                        </div>
-                      </a>
-                      <a class="dropdown-item px-card py-2" href="../../pages/user/profile.html">
-                        <div class="d-flex align-items-center">
-                          <div class="avatar avatar-l me-2">
-                            <img class="rounded-circle" src="../../assets/img/team/2.jpg" alt="" />
-                          </div>
-                          <div class="flex-1">
-                            <h6 class="mb-0 title">Antony Hopkins</h6>
-                            <p class="fs--2 mb-0 d-flex">Brain Trust</p>
-                          </div>
-                        </div>
-                      </a>
-                      <a class="dropdown-item px-card py-2" href="../../pages/user/profile.html">
-                        <div class="d-flex align-items-center">
-                          <div class="avatar avatar-l me-2">
-                            <img class="rounded-circle" src="../../assets/img/team/3.jpg" alt="" />
-                          </div>
-                          <div class="flex-1">
-                            <h6 class="mb-0 title">Emma Watson</h6>
-                            <p class="fs--2 mb-0 d-flex">Google</p>
-                          </div>
-                        </div>
-                      </a>
-                    </div>
-                    <div class="text-center mt-n3">
-                      <p class="fallback fw-bold fs-1 d-none">No Result Found.</p>
-                    </div>
-                  </div>
-                </div>
-              </li>
-            </ul>
             <ul class="navbar-nav navbar-nav-icons ms-auto flex-row align-items-center">
               <li class="nav-item">
                 <div class="theme-control-toggle fa-icon-wait px-2"><input class="form-check-input ms-0 theme-control-toggle-input" id="themeControlToggle" type="checkbox" data-theme-control="theme" value="dark" /><label class="mb-0 theme-control-toggle-label theme-control-toggle-light" for="themeControlToggle" data-bs-toggle="tooltip" data-bs-placement="left" title="Switch to light theme"><span class="fas fa-sun fs-0"></span></label><label class="mb-0 theme-control-toggle-label theme-control-toggle-dark" for="themeControlToggle" data-bs-toggle="tooltip" data-bs-placement="left" title="Switch to dark theme"><span class="fas fa-moon fs-0"></span></label></div>
               </li>
-<!--              <li class="nav-item">-->
-<!--                <a class="nav-link px-0 notification-indicator notification-indicator-warning notification-indicator-fill fa-icon-wait" href="../../app/e-commerce/shopping-cart.html"><span class="fas fa-shopping-cart" data-fa-transform="shrink-7" style="font-size: 33px;"></span><span class="notification-indicator-number">1</span></a>-->
-<!--              </li>-->
-              <li class="nav-item dropdown">
-                <a class="nav-link notification-indicator notification-indicator-primary px-0 fa-icon-wait" id="navbarDropdownNotification" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="fas fa-bell" data-fa-transform="shrink-6" style="font-size: 33px;"></span></a>
-                <div class="dropdown-menu dropdown-menu-end dropdown-menu-card dropdown-menu-notification" aria-labelledby="navbarDropdownNotification">
-                  <div class="card card-notification shadow-none">
-                    <div class="card-header">
-                      <div class="row justify-content-between align-items-center">
-                        <div class="col-auto">
-                          <h6 class="card-header-title mb-0">Notifications</h6>
-                        </div>
-                        <div class="col-auto ps-0 ps-sm-3"><a class="card-link fw-normal" href="#">Mark all as read</a></div>
-                      </div>
-                    </div>
-                    <div class="scrollbar-overlay" style="max-height:19rem">
-                      <div class="list-group list-group-flush fw-normal fs--1">
-                        <div class="list-group-title border-bottom">NEW</div>
-                        <div class="list-group-item">
-                          <a class="notification notification-flush notification-unread" href="#!">
-                            <div class="notification-avatar">
-                              <div class="avatar avatar-2xl me-3">
-                                <img class="rounded-circle" src="../../assets/img/team/1-thumb.png" alt="" />
-                              </div>
-                            </div>
-                            <div class="notification-body">
-                              <p class="mb-1"><strong>Emma Watson</strong> replied to your comment : "Hello world 😍"</p>
-                              <span class="notification-time"><span class="me-2" role="img" aria-label="Emoji">💬</span>Just now</span>
-                            </div>
-                          </a>
-                        </div>
-                        <div class="list-group-item">
-                          <a class="notification notification-flush notification-unread" href="#!">
-                            <div class="notification-avatar">
-                              <div class="avatar avatar-2xl me-3">
-                                <div class="avatar-name rounded-circle"><span>AB</span></div>
-                              </div>
-                            </div>
-                            <div class="notification-body">
-                              <p class="mb-1"><strong>Albert Brooks</strong> reacted to <strong>Mia Khalifa's</strong> status</p>
-                              <span class="notification-time"><span class="me-2 fab fa-gratipay text-danger"></span>9hr</span>
-                            </div>
-                          </a>
-                        </div>
-                        <div class="list-group-title border-bottom">EARLIER</div>
-                        <div class="list-group-item">
-                          <a class="notification notification-flush" href="#!">
-                            <div class="notification-avatar">
-                              <div class="avatar avatar-2xl me-3">
-                                <img class="rounded-circle" src="../../assets/img/icons/weather-sm.jpg" alt="" />
-                              </div>
-                            </div>
-                            <div class="notification-body">
-                              <p class="mb-1">The forecast today shows a low of 20&#8451; in California. See today's weather.</p>
-                              <span class="notification-time"><span class="me-2" role="img" aria-label="Emoji">🌤️</span>1d</span>
-                            </div>
-                          </a>
-                        </div>
-                        <div class="list-group-item">
-                          <a class="border-bottom-0 notification-unread  notification notification-flush" href="#!">
-                            <div class="notification-avatar">
-                              <div class="avatar avatar-xl me-3">
-                                <img class="rounded-circle" src="../../assets/img/logos/oxford.png" alt="" />
-                              </div>
-                            </div>
-                            <div class="notification-body">
-                              <p class="mb-1"><strong>University of Oxford</strong> created an event : "Causal Inference Hilary 2019"</p>
-                              <span class="notification-time"><span class="me-2" role="img" aria-label="Emoji">✌️</span>1w</span>
-                            </div>
-                          </a>
-                        </div>
-                        <div class="list-group-item">
-                          <a class="border-bottom-0 notification notification-flush" href="#!">
-                            <div class="notification-avatar">
-                              <div class="avatar avatar-xl me-3">
-                                <img class="rounded-circle" src="../../assets/img/team/10.jpg" alt="" />
-                              </div>
-                            </div>
-                            <div class="notification-body">
-                              <p class="mb-1"><strong>James Cameron</strong> invited to join the group: United Nations International Children's Fund</p>
-                              <span class="notification-time"><span class="me-2" role="img" aria-label="Emoji">🙋‍</span>2d</span>
-                            </div>
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="card-footer text-center border-top"><a class="card-link d-block" href="../../app/social/notifications.html">View all</a></div>
-                  </div>
-                </div>
-              </li>
+
               <li class="nav-item dropdown"><a class="nav-link pe-0" id="navbarDropdownUser" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <div class="avatar avatar-xl">
                     <img class="rounded-circle" src="{{ url_for('static', filename='assets/img/team/3-thumb.png') }}" alt="" />
@@ -474,7 +199,7 @@
               <ul class="navbar-nav" data-top-nav-dropdowns="data-top-nav-dropdowns">
                 <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="dashboards">Dashboard</a>
                   <div class="dropdown-menu dropdown-menu-card border-0 mt-0" aria-labelledby="dashboards">
-                    <div class="bg-white dark__bg-1000 rounded-3 py-2"><a class="dropdown-item link-600 fw-medium" href="../../index.html">Default</a><a class="dropdown-item link-600 fw-medium" href="../../dashboard/analytics.html">Analytics</a><a class="dropdown-item link-600 fw-medium" href="../../dashboard/crm.html">CRM</a><a class="dropdown-item link-600 fw-medium" href="../../dashboard/e-commerce.html">E commerce</a><a class="dropdown-item link-600 fw-medium" href="../../dashboard/project-management.html">Management</a><a class="dropdown-item link-600 fw-medium" href="../../dashboard/saas.html">SaaS</a></div>
+                    <div class="bg-white dark__bg-1000 rounded-3 py-2"><a class="dropdown-item link-600 fw-medium" href="../../index.html">Default</a>
                   </div>
                 </li>
                 <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="apps">App</a>
@@ -499,96 +224,7 @@
               <li class="nav-item">
                 <div class="theme-control-toggle fa-icon-wait px-2"><input class="form-check-input ms-0 theme-control-toggle-input" id="themeControlToggle" type="checkbox" data-theme-control="theme" value="dark" /><label class="mb-0 theme-control-toggle-label theme-control-toggle-light" for="themeControlToggle" data-bs-toggle="tooltip" data-bs-placement="left" title="Switch to light theme"><span class="fas fa-sun fs-0"></span></label><label class="mb-0 theme-control-toggle-label theme-control-toggle-dark" for="themeControlToggle" data-bs-toggle="tooltip" data-bs-placement="left" title="Switch to dark theme"><span class="fas fa-moon fs-0"></span></label></div>
               </li>
-              <li class="nav-item">
-                <a class="nav-link px-0 notification-indicator notification-indicator-warning notification-indicator-fill fa-icon-wait" href="../../app/e-commerce/shopping-cart.html"><span class="fas fa-shopping-cart" data-fa-transform="shrink-7" style="font-size: 33px;"></span><span class="notification-indicator-number">1</span></a>
-              </li>
-              <li class="nav-item dropdown">
-                <a class="nav-link notification-indicator notification-indicator-primary px-0 fa-icon-wait" id="navbarDropdownNotification" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="fas fa-bell" data-fa-transform="shrink-6" style="font-size: 33px;"></span></a>
-                <div class="dropdown-menu dropdown-menu-end dropdown-menu-card dropdown-menu-notification" aria-labelledby="navbarDropdownNotification">
-                  <div class="card card-notification shadow-none">
-                    <div class="card-header">
-                      <div class="row justify-content-between align-items-center">
-                        <div class="col-auto">
-                          <h6 class="card-header-title mb-0">Notifications</h6>
-                        </div>
-                        <div class="col-auto ps-0 ps-sm-3"><a class="card-link fw-normal" href="#">Mark all as read</a></div>
-                      </div>
-                    </div>
-                    <div class="scrollbar-overlay" style="max-height:19rem">
-                      <div class="list-group list-group-flush fw-normal fs--1">
-                        <div class="list-group-title border-bottom">NEW</div>
-                        <div class="list-group-item">
-                          <a class="notification notification-flush notification-unread" href="#!">
-                            <div class="notification-avatar">
-                              <div class="avatar avatar-2xl me-3">
-                                <img class="rounded-circle" src="../../assets/img/team/1-thumb.png" alt="" />
-                              </div>
-                            </div>
-                            <div class="notification-body">
-                              <p class="mb-1"><strong>Emma Watson</strong> replied to your comment : "Hello world 😍"</p>
-                              <span class="notification-time"><span class="me-2" role="img" aria-label="Emoji">💬</span>Just now</span>
-                            </div>
-                          </a>
-                        </div>
-                        <div class="list-group-item">
-                          <a class="notification notification-flush notification-unread" href="#!">
-                            <div class="notification-avatar">
-                              <div class="avatar avatar-2xl me-3">
-                                <div class="avatar-name rounded-circle"><span>AB</span></div>
-                              </div>
-                            </div>
-                            <div class="notification-body">
-                              <p class="mb-1"><strong>Albert Brooks</strong> reacted to <strong>Mia Khalifa's</strong> status</p>
-                              <span class="notification-time"><span class="me-2 fab fa-gratipay text-danger"></span>9hr</span>
-                            </div>
-                          </a>
-                        </div>
-                        <div class="list-group-title border-bottom">EARLIER</div>
-                        <div class="list-group-item">
-                          <a class="notification notification-flush" href="#!">
-                            <div class="notification-avatar">
-                              <div class="avatar avatar-2xl me-3">
-                                <img class="rounded-circle" src="../../assets/img/icons/weather-sm.jpg" alt="" />
-                              </div>
-                            </div>
-                            <div class="notification-body">
-                              <p class="mb-1">The forecast today shows a low of 20&#8451; in California. See today's weather.</p>
-                              <span class="notification-time"><span class="me-2" role="img" aria-label="Emoji">🌤️</span>1d</span>
-                            </div>
-                          </a>
-                        </div>
-                        <div class="list-group-item">
-                          <a class="border-bottom-0 notification-unread  notification notification-flush" href="#!">
-                            <div class="notification-avatar">
-                              <div class="avatar avatar-xl me-3">
-                                <img class="rounded-circle" src="../../assets/img/logos/oxford.png" alt="" />
-                              </div>
-                            </div>
-                            <div class="notification-body">
-                              <p class="mb-1"><strong>University of Oxford</strong> created an event : "Causal Inference Hilary 2019"</p>
-                              <span class="notification-time"><span class="me-2" role="img" aria-label="Emoji">✌️</span>1w</span>
-                            </div>
-                          </a>
-                        </div>
-                        <div class="list-group-item">
-                          <a class="border-bottom-0 notification notification-flush" href="#!">
-                            <div class="notification-avatar">
-                              <div class="avatar avatar-xl me-3">
-                                <img class="rounded-circle" src="../../assets/img/team/10.jpg" alt="" />
-                              </div>
-                            </div>
-                            <div class="notification-body">
-                              <p class="mb-1"><strong>James Cameron</strong> invited to join the group: United Nations International Children's Fund</p>
-                              <span class="notification-time"><span class="me-2" role="img" aria-label="Emoji">🙋‍</span>2d</span>
-                            </div>
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="card-footer text-center border-top"><a class="card-link d-block" href="../../app/social/notifications.html">View all</a></div>
-                  </div>
-                </div>
-              </li>
+
               <li class="nav-item dropdown"><a class="nav-link pe-0" id="navbarDropdownUser" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <div class="avatar avatar-xl">
                     <img class="rounded-circle" src="../../assets/img/team/3-thumb.png" alt="" />
@@ -648,7 +284,7 @@
             <div class="card-header">
               <div class="row flex-between-end">
                 <div class="col-auto align-self-center">
-                  <h5 class="mb-0" data-anchor="data-anchor">Table Example</h5>
+                  <h5 class="mb-0" data-anchor="data-anchor">Files List</h5>
                 </div>
                 <div class="col-auto ms-auto">
                   <div class="nav nav-pills nav-pills-falcon flex-grow-1" role="tablist">
@@ -666,16 +302,66 @@
                         <thead class="bg-200 text-900">
                           <tr>
                             <th class="sort" data-sort="name">Shared Files</th>
-                            <th data-sort="email" style="text-align:center">Actions</th>
+                            <th data-sort="email" class="text-center">Actions</th>
                           </tr>
                         </thead>
                         <tbody class="list">
 
-                        {% for filename in files %}
+                        {% for filename, type, pos, size in files %}
                           <tr>
                             <td class="name">{{filename}}</td>
-                            <td class="age col-1 text-center">
-                              <a class="btn btn-primary btn-sm" href="/WebShare/files/{{filename}}">Download</a>
+                            <td class="age col-1">
+                              <div class="btn-group text-center">
+                                <a class="btn btn-primary btn-sm" href="/WebShare/files/{{filename}}" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Click left button for Watch">Download</a>
+                                  {% if type != "videos" %}
+                                  <button class="btn btn-primary btn-sm" type="button" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="Top Popover"><span class="fas fa-cog"></span></button>
+                                  {% else %}
+                                  <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop{{pos}}"><span class="fas fa-eye"></span></button>
+                                  {% endif %}
+                              </div>
+                              {% if type != "videos" %}
+                              {% else %}
+                              <div class="modal fade" id="staticBackdrop{{pos}}" data-bs-keyboard="false" data-bs-backdrop="static" tabindex="-1" aria-labelledby="staticBackdropLabel{{pos}}" aria-hidden="true">
+                                  <div class="modal-dialog modal-lg mt-6" role="document">
+                                    <div class="modal-content border-0">
+                                      <div class="position-absolute top-0 end-0 mt-3 me-3 z-index-1"><button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base" data-bs-dismiss="modal" aria-label="Close"></button></div>
+                                      <div class="modal-body p-0">
+                                        <div class="bg-light rounded-top-lg py-3 ps-4 pe-6">
+                                          <h4 class="mb-1" id="staticBackdropLabel{{pos}}">{{filename}}</h4>
+                                          <p class="fs--2 mb-0">Develop by <a class="link-600 fw-semi-bold" href="#!">Corneille</a></p>
+                                        </div>
+                                        <div class="p-4">
+                                          <div class="row">
+                                            <div class="col-lg-9">
+                                              <div class="d-flex"><span class="fa-stack ms-n1 me-3"><i class="fas fa-circle fa-stack-2x text-200"></i><i class="fa-inverse fa-stack-1x text-primary fas fa-play" data-fa-transform="shrink-2"></i></span>
+                                                <div class="flex-1">
+                                                  <video class="rounded-3 w-100 text-center" id="player" playsinline controls>
+                                                    <source src="{{ url_for('static', filename='134795022-1312d011-40f2-4641-8c8d-3d6c0e752747.mp4') }}" type="video/mp4"/>
+                                                  </video>
+                                                  <hr class="my-4" />
+                                                </div>
+                                              </div>
+                                              <div class="d-flex"><span class="fa-stack ms-n1 me-3"><i class="fas fa-circle fa-stack-2x text-200"></i><i class="fa-inverse fa-stack-1x text-primary fas fa-align-left" data-fa-transform="shrink-2"></i></span>
+                                                <div class="flex-1">
+                                                  <h5 class="mb-2 fs-0">Description</h5>
+                                                  <p class="text-word-break fs--1">Lorem ipsum dolor sit amet, consectetur adipisicing elit. A consequuntur corporis, dolor doloribus, eligendi enim error id iusto laborum nulla numquam optio quos rem saepe sed sit suscipit tempora! Harum.</p>
+                                                </div>
+                                              </div>
+                                            </div>
+                                            <div class="col-lg-3">
+                                              <h6 class="mt-5 mt-lg-0">OPTIONS</h6>
+                                              <ul class="nav flex-lg-column fs--1">
+                                                <li class="nav-item me-2 me-lg-0"><a class="nav-link nav-link-card-details" href="/WebShare/files/{{filename}}"><span class="fas fa-download me-2"></span>Download</a></li>
+                                                <li class="nav-item me-2 me-lg-0"><a class="nav-link nav-link-card-details" href="#!"><span class="fas fa-paperclip me-2"></span>File size: {{size}}</a></li>
+                                              </ul>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              {% endif %}
                             </td>
                           </tr>
                         {% endfor %}
@@ -702,7 +388,6 @@
               </div>
             </div>
           </div>
-
           <footer class="footer">
             <div class="row g-0 justify-content-between fs--1 mt-4 mb-3">
               <div class="col-12 col-sm-auto text-center">
@@ -801,6 +486,8 @@
     <script src="{{ url_for('static', filename='vendors/lodash/lodash.min.js') }}"></script>
     <script src="{{ url_for('static', filename='vendors/list.js/list.min.js') }}"></script>
     <script src="{{ url_for('static', filename='assets/js/theme.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendors/plyr/plyr.polyfilled.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendors/glightbox/glightbox.min.js') }}"></script>
 	</body>
 </html>
 
