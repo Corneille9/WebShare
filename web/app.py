@@ -1,7 +1,7 @@
 import os
 import socket
 
-from quart import Quart, render_template, send_from_directory, jsonify, abort
+from quart import Quart, render_template, send_from_directory, jsonify, abort, flash, redirect, url_for
 
 from app.utils.utilities import get_file_icon
 
@@ -13,9 +13,16 @@ class SharedFiles:
         self.host = socket.gethostname()
         self.port = 80
         self.files = []
-        self.route()
+        self.UPLOAD_FOLDER = 'static/uploads/'
+        self.config()
+        self.def_route()
 
-    def route(self):
+    def config(self):
+        self.app.secret_key = "secret key"
+        self.app.config['UPLOAD_FOLDER'] = self.UPLOAD_FOLDER
+        self.app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
+
+    def def_route(self):
         @self.app.route('/')
         async def index():
             files = []
@@ -24,6 +31,7 @@ class SharedFiles:
                 if os.path.isfile(file):
                     files.append((os.path.basename(file), get_file_icon(file, type_only=True), pos, "200MB"))
                     pos += 1
+            # await flash('No image selected for uploading')
             return await render_template('index.html', files=files)
 
         @self.app.route('/isConnected')
@@ -57,8 +65,10 @@ class SharedFiles:
         async def video_feed(path):
             for file in self.files:
                 if os.path.basename(file) == path:
-                    
-                    pass
+                    with open(file, "r") as fic:
+                        with open(self.UPLOAD_FOLDER + path, "w") as rfic:
+                            rfic.write(fic.read())
+                    return redirect(url_for('static', filename='uploads/' + path), code=301)
             abort(400, "No file allowed")
 
     def run(self):

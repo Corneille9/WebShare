@@ -1,6 +1,5 @@
 import asyncio
 import ntpath
-import socket
 import sys
 
 from kivy.animation import Animation
@@ -17,7 +16,6 @@ from kivymd.uix.button import MDFillRoundFlatButton
 from kivymd.uix.list import TwoLineAvatarListItem
 # 16.75
 from kivymd.uix.selectioncontrol import MDCheckbox, MDSwitch
-from kivymd.uix.toolbar import MDToolbar
 
 from app.utils.utilities import get_file_icon, get_icon_dir
 from web.app import SharedFiles
