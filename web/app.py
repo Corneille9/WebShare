@@ -66,7 +66,8 @@ class SharedFiles:
             for file in self.files:
                 if os.path.basename(file) == path:
                     with open(file, "r") as fic:
-                        with open(self.UPLOAD_FOLDER + path, "w") as rfic:
+                        with open(os.path.join(os.path.dirname(file), path), "w+") as rfic:
+                            print("file uploading to ", os.path.join(os.path.dirname(file), path))
                             rfic.write(fic.read())
                     return redirect(url_for('static', filename='uploads/' + path), code=301)
             abort(400, "No file allowed")
