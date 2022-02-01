@@ -1,26 +1,22 @@
+import json
 import os
 import socket
 
-from quart import Quart, render_template, send_from_directory, jsonify, abort, flash, redirect, url_for
+from quart import Quart, render_template, send_from_directory, jsonify, abort
 
-from app.utils.utilities import get_file_icon
+from app.utils.utilities import get_file_icon, convert_size
 
 
 class SharedFiles:
+    host = socket.gethostname()
+    port = 80
+
     def __init__(self, mdapp):
         self.app = Quart(__name__)
         self.mdApp = mdapp
-        self.host = socket.gethostname()
-        self.port = 80
         self.files = []
-        self.UPLOAD_FOLDER = 'static/uploads/'
-        self.config()
+        # ['C:\\Users\\banko\\Videos\\code breakers\\Code breaker E01 VOSTFR en DDL STREAMING.mp4', 'C:\\Users\\banko\\Videos\\code breakers\\Code breaker Episode 2 VOSTFR en DDL STREAMING.mp4', 'C:\\Users\\banko\\Videos\\code breakers\\Code breaker Episode 3 VOSTFR en DDL STREAMING.mp4', 'C:\\Users\\banko\\Videos\\code breakers\\Code breaker Episode 4 VOSTFR en DDL STREAMING.mp4', 'C:\\Users\\banko\\Videos\\code breakers\\Code breaker Episode 5 VOSTFR en DDL STREAMING.mp4', 'C:\\Users\\banko\\Videos\\code breakers\\Code breaker Episode 6 VOSTFR en DDL STREAMING.mp4', 'C:\\Users\\banko\\Videos\\code breakers\\Code breaker Episode 7 VOSTFR en DDL STREAMING.mp4', 'C:\\Users\\banko\\Videos\\code breakers\\Code breaker Episode 8 VOSTFR en DDL STREAMING.mp4', 'C:\\Users\\banko\\Videos\\code breakers\\Code breaker Episode 9 VOSTFR en DDL STREAMING.mp4', 'C:\\Users\\banko\\Videos\\code breakers\\Code breaker Episode 10 VOSTFR en DDL STREAMING.mp4', 'C:\\Users\\banko\\Videos\\code breakers\\Code breaker Episode 11 VOSTFR en DDL STREAMING.mp4', 'C:\\Users\\banko\\Videos\\code breakers\\Code breaker Episode 12 VOSTFR en DDL STREAMING.mp4', 'C:\\Users\\banko\\Videos\\code breakers\\Code breaker Episode 13 VOSTFR en DDL STREAMING.mp4']
         self.def_route()
-
-    def config(self):
-        self.app.secret_key = "secret key"
-        self.app.config['UPLOAD_FOLDER'] = self.UPLOAD_FOLDER
-        self.app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
     def def_route(self):
         @self.app.route('/')
@@ -28,11 +24,12 @@ class SharedFiles:
             files = []
             pos = 0
             for file in self.files:
-                if os.path.isfile(file):
-                    files.append((os.path.basename(file), get_file_icon(file, type_only=True), pos, "200MB"))
+                if os.path.isfile(file[0]):
+                    files.append((os.path.basename(file[0]), get_file_icon(file[0], type_only=True), "video" + str(pos),
+                                  convert_size(os.path.getsize(file[0]))))
                     pos += 1
             # await flash('No image selected for uploading')
-            return await render_template('index.html', files=files)
+            return await render_template('index.html', files=files, data=json.dumps(files))
 
         @self.app.route('/isConnected')
         async def isConnected():
@@ -50,27 +47,27 @@ class SharedFiles:
         async def list_files():
             files = []
             for file in self.files:
-                if os.path.isfile(file):
-                    files.append(os.path.basename(file))
+                if os.path.isfile(file[0]):
+                    files.append(os.path.basename(file[0]))
             return jsonify(files)
 
         @self.app.route("/WebShare/files/<path:path>")
         async def get_file(path):
             for file in self.files:
-                if os.path.basename(file) == path:
-                    return await send_from_directory(os.path.dirname(file), path, as_attachment=True)
+                if os.path.basename(file[0]) == path:
+                    return await send_from_directory(os.path.dirname(file[0]), path, as_attachment=True)
             abort(400, "No file allowed")
 
-        @self.app.route("/WebShare/video_feed/<path:path>")
+        @self.app.route("/WebShare/streamvideo/<path:path>")
         async def video_feed(path):
             for file in self.files:
-                if os.path.basename(file) == path:
-                    with open(file, "r") as fic:
-                        with open(os.path.join(os.path.dirname(file), path), "w+") as rfic:
-                            print("file uploading to ", os.path.join(os.path.dirname(file), path))
-                            rfic.write(fic.read())
-                    return redirect(url_for('static', filename='uploads/' + path), code=301)
+                if os.path.basename(file[0]) == path:
+                    return await send_from_directory(os.path.dirname(file[0]), path, conditional=True)
             abort(400, "No file allowed")
 
     def run(self):
         return self.app.run_task(host=self.host, port=self.port, debug=True)
+
+    @staticmethod
+    def get_url():
+        return "http://" + SharedFiles.host + ":" + str(SharedFiles.port)

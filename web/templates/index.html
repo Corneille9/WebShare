@@ -199,7 +199,7 @@
               <ul class="navbar-nav" data-top-nav-dropdowns="data-top-nav-dropdowns">
                 <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="dashboards">Dashboard</a>
                   <div class="dropdown-menu dropdown-menu-card border-0 mt-0" aria-labelledby="dashboards">
-                    <div class="bg-white dark__bg-1000 rounded-3 py-2"><a class="dropdown-item link-600 fw-medium" href="../../index.html">Default</a>
+                    <div class="bg-white dark__bg-1000 rounded-3 py-2"><a class="dropdown-item link-600 fw-medium" href="../../index.html">Default</a></div>
                   </div>
                 </li>
                 <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="apps">App</a>
@@ -314,20 +314,25 @@
                               <div class="btn-group text-center">
                                 <a class="btn btn-primary btn-sm" href="/WebShare/files/{{filename}}" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Click left button for Watch">Download</a>
                                   {% if type != "videos" %}
-                                  <button class="btn btn-primary btn-sm" type="button" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="Top Popover"><span class="fas fa-cog"></span></button>
+                                  <button  class="btn btn-primary btn-sm" type="button" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="Top Popover"><span class="fas fa-cog"></span></button>
                                   {% else %}
-                                  <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop{{pos}}"><span class="fas fa-eye"></span></button>
+                                  <button onclick="updateModal({{pos}})" class="btn btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id="{{pos}}"><span class="fas fa-eye"></span></button>
                                   {% endif %}
                               </div>
-                              {% if type != "videos" %}
-                              {% else %}
-                              <div class="modal fade" id="staticBackdrop{{pos}}" data-bs-keyboard="false" data-bs-backdrop="static" tabindex="-1" aria-labelledby="staticBackdropLabel{{pos}}" aria-hidden="true">
+<!--                              {% if type != "videos" %}-->
+<!--                              {% else %}-->
+<!--                              {% endif %}-->
+                            </td>
+                          </tr>
+                        {% endfor %}
+
+                        <div class="modal fade" id="staticBackdrop" data-bs-keyboard="false" data-bs-backdrop="static" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                   <div class="modal-dialog modal-lg mt-6" role="document">
                                     <div class="modal-content border-0">
                                       <div class="position-absolute top-0 end-0 mt-3 me-3 z-index-1"><button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base" data-bs-dismiss="modal" aria-label="Close"></button></div>
                                       <div class="modal-body p-0">
                                         <div class="bg-light rounded-top-lg py-3 ps-4 pe-6">
-                                          <h4 class="mb-1" id="staticBackdropLabel{{pos}}">{{filename}}</h4>
+                                          <h4 class="mb-1" id="staticBackdropLabel">Video</h4>
                                           <p class="fs--2 mb-0">Develop by <a class="link-600 fw-semi-bold" href="#!">Corneille</a></p>
                                         </div>
                                         <div class="p-4">
@@ -336,7 +341,7 @@
                                               <div class="d-flex"><span class="fa-stack ms-n1 me-3"><i class="fas fa-circle fa-stack-2x text-200"></i><i class="fa-inverse fa-stack-1x text-primary fas fa-play" data-fa-transform="shrink-2"></i></span>
                                                 <div class="flex-1">
                                                   <video class="rounded-3 w-100 text-center" id="player" playsinline controls>
-                                                    <source src="/WebShare/video_feed/{{filename}}" type="video/mp4"/>
+                                                    <source id="preview" src="" type="video/mp4"/>
                                                   </video>
                                                   <hr class="my-4" />
                                                 </div>
@@ -351,8 +356,8 @@
                                             <div class="col-lg-3">
                                               <h6 class="mt-5 mt-lg-0">OPTIONS</h6>
                                               <ul class="nav flex-lg-column fs--1">
-                                                <li class="nav-item me-2 me-lg-0"><a class="nav-link nav-link-card-details" href="/WebShare/files/{{filename}}"><span class="fas fa-download me-2"></span>Download</a></li>
-                                                <li class="nav-item me-2 me-lg-0"><a class="nav-link nav-link-card-details" href="#!"><span class="fas fa-paperclip me-2"></span>File size: {{size}}</a></li>
+                                                <li class="nav-item me-2 me-lg-0"><a class="nav-link nav-link-card-details" id="downloadlink" href="#!"><span class="fas fa-download me-2"></span>Download</a></li>
+                                                <li class="nav-item me-2 me-lg-0" id="sizeli"><a class="nav-link nav-link-card-details" href="#!" id="size"><span class="fas fa-paperclip me-2"></span>File size: </a></li>
                                               </ul>
                                             </div>
                                           </div>
@@ -361,10 +366,6 @@
                                     </div>
                                   </div>
                                 </div>
-                              {% endif %}
-                            </td>
-                          </tr>
-                        {% endfor %}
 
                         </tbody>
                       </table>
@@ -477,6 +478,22 @@
         </div><small class="text-uppercase text-primary fw-bold bg-soft-primary py-2 pe-2 ps-1 rounded-end">customize</small>
       </div>
     </a>
+    <script>
+      let data = JSON.parse({{data|tojson}});
+      function updateModal(id) {
+        data.forEach(function (item) {
+            if(document.getElementById(item[2]) === id){
+            document.getElementById("staticBackdropLabel").innerText = item[0];
+            document.getElementById("downloadlink").href = "/WebShare/files/" + item[0];
+            document.getElementById("size").remove()
+            document.getElementById("sizeli").insertAdjacentHTML("beforeend", '<a class="nav-link nav-link-card-details text-truncate" href="#!" id="size"><span class="fas fa-paperclip me-2"></span>File size:&nbsp' + item[3] + ' </a>')
+            document.getElementById("preview").src = "/WebShare/streamvideo/" + item[0]
+            document.getElementById("player").load()
+            document.getElementById("player").play()
+        }
+        })
+    }
+    </script>
     <script src="{{ url_for('static', filename='vendors/popper/popper.min.js') }}"></script>
     <script src="{{ url_for('static', filename='vendors/bootstrap/bootstrap.min.js') }}"></script>
     <script src="{{ url_for('static', filename='vendors/anchorjs/anchor.min.js') }}"></script>

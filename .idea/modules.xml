@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/AppInstaller.iml" filepath="$PROJECT_DIR$/.idea/AppInstaller.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/WebShare.iml" filepath="$PROJECT_DIR$/.idea/WebShare.iml" />
     </modules>
   </component>
 </project>

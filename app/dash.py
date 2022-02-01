@@ -1,27 +1,36 @@
 import asyncio
 import ntpath
 import sys
+import textwrap
 
 from kivy.animation import Animation
+from kivy.core.window import Window
 from kivy.factory import Factory
 from kivy.lang import Builder
 from kivy.network.urlrequest import UrlRequest
 from kivy.properties import StringProperty
+from kivy.uix.boxlayout import BoxLayout
 from kivy.utils import get_color_from_hex
 from kivymd.app import MDApp
+from kivymd.material_resources import dp
 from kivymd.uix.behaviors import TouchBehavior
 from kivymd.uix.bottomsheet import MDCustomBottomSheet
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDFillRoundFlatButton
+from kivymd.uix.gridlayout import MDGridLayout
+from kivymd.uix.label import MDLabel
 from kivymd.uix.list import TwoLineAvatarListItem
 # 16.75
 from kivymd.uix.selectioncontrol import MDCheckbox, MDSwitch
+from kivymd.uix.snackbar import Snackbar
 
+from app.utils.database_manager import DbManager
 from app.utils.utilities import get_file_icon, get_icon_dir
 from web.app import SharedFiles
 
 KV = '''
 #:import MagicBehavior kivymd.uix.behaviors.MagicBehavior
+#:import get_color_from_hex kivy.utils.get_color_from_hex
 
 <ContentNavigationDrawer>:
     nav_drawer: root.nav_drawer
@@ -70,39 +79,46 @@ MDNavigationLayout:
         
             MDBoxLayout:
                 orientation: "vertical"
-        
+                        
                 MDToolbar:
                     id: toolbar
                     left_action_items: [["menu", lambda x: nav_drawer.set_state("open"), "Menu"]]
-                    right_action_items: [["magnify"], ["dots-vertical"], ]
-                    md_bg_color: 0, 0, 0, 1   
+                    right_action_items: [["magnify"], ["dots-vertical"], ]   
             
-                MDBoxLayout:
+                MDGridLayout:
                     id: box
-                    padding: "24dp", "8dp", 0, "8dp"
-                    adaptive_size: True
+                    cols: 2
+                    adaptive_height: True
+                    height: '60dp'
             
                     MDLabel:
                         bold: True
                         text: "Application list"
-                        adaptive_size: True
                         font_name: 'Kanit-SemiBold.ttf'
-                        pos_hint: {'center_x': .5, 'center_y': .5}
+                        padding: "20dp", "5dp"
+                        color: "62acce"
+                    
+                    MDBoxLayout:   
+                        halign: 'right'
                         
-                    MDLabel:
-                        padding: "20dp", "0dp"
-                        bold: True
-                        text: "Tout Cocher"
-                        adaptive_size: True
-                        font_name: 'Kanit-SemiBold.ttf'
-                        pos_hint: {'center_x': .9, 'center_y': .5}
-                            
-                    MDCheckbox:
-                        size_hint: None, None
-                        size: "48dp", "48dp"
-                        pos_hint: {'center_x': .5, 'center_y': .5}    
+                        MDLabel:
+                            padding: "20dp", "0dp"
+                            bold: True
+                            text: "Select all"
+                            font_name: 'Kanit-SemiBold.ttf'
+                            halign: 'right'
+                            color: "62acce"
+                                
+                        MDCheckbox:
+                            size_hint: None, None
+                            size: "48dp", "48dp"
+                            on_active: app.on_checkbox_active(*args)  
+                            pos_hint: {'center_x': .5, 'center_y': .5}    
+                            active: True
+                            halign: 'center'
                         
                 ScrollView:
+                    do_scroll_x: False
             
                     MDSelectionList:
                         id: selection_list
@@ -114,25 +130,21 @@ MDNavigationLayout:
                         on_selected_mode: app.set_selection_mode(*args)
                  
                 MDBottomAppBar:
-                    height: 10
-                    md_bg_color: 0, 0, 0, 1 
+                    id : bottom_Appbar
                 
                     MDToolbar:
                         id: bottom_toolbar
                         icon: "git"
+                        margin: 110, 100
                         type: "bottom"
                         on_action_button: app.on_float_button_click(self)
                         icon_color: 0, 0, 0, 1
-                        left_action_items: [["router-network", lambda x: app.show_custom_bottom_sheet(), "Paramètres du server"]]       
+                        left_action_items: [["router-network", lambda x: app.show_custom_bottom_sheet(), "Paramètres du server"]]     
+                        elevation : 8  
                 
     MDNavigationDrawer:
         id: nav_drawer
         orientation:"vertical"
-                
-        MDToolbar:
-            title: 'WebShare'
-            elevation: 10    
-            md_bg_color: 0, 0, 0, 1  
             
         ContentNavigationDrawer:  
             nav_drawer: nav_drawer                                    
@@ -140,32 +152,19 @@ MDNavigationLayout:
 <ContentCustomSheet@BoxLayout>:
     orientation: "vertical"
     size_hint_y: None
-    height: "200dp"
-
-    ScrollView:
-        MDBoxLayout:
-            orientation: "vertical"
-            MDBoxLayout
-                orientation: "horizontal"
-                MDLabel:
-                    padding: "20dp", "0dp"
-                    bold: True
-                    text: "Url :           http://192.168.43.214/SharedFiles"
-                    adaptive_size: True
-                    font_name: 'Kanit-SemiBold.ttf'
-                    pos_hint: {'center_x': .9, 'center_y': .5}
-                    
-       
+    height: "200dp"        
 '''
 
 
 class MyItem(TwoLineAvatarListItem):
+    all_items = []
+
     def __init__(self, path, **kwargs):
         super().__init__(**kwargs)
         self.source = get_icon_dir() + get_file_icon(path)
         self.path = path
-        self.text = ntpath.basename(path)
-        self.secondary_text = path
+        self.text = textwrap.shorten(ntpath.basename(path), width=80, placeholder="...")
+        self.secondary_text = textwrap.shorten(path, width=50, placeholder="...")
         self._no_ripple_effect = True
         self.check = MDCheckbox(
             pos_hint={"center_x": .9, "center_y": .5},
@@ -174,9 +173,12 @@ class MyItem(TwoLineAvatarListItem):
         )
         self.check.active = True
         self.add_widget(self.check)
+        self.all_items.append(self.check)
 
 
 class WebShare(MDApp):
+    db_manager = DbManager()
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.overlay_color = get_color_from_hex("#6042e4")
@@ -184,10 +186,26 @@ class WebShare(MDApp):
         self.other_task = None
         self.sharedFiles = SharedFiles(self)
 
-    def add_files(self, file_path):
-        for path in file_path:
-            self.sharedFiles.files.append(path)
-            self.root.ids.selection_list.add_widget(MyItem(path=path))
+    def colors_definition(self):
+        self.theme_cls.colors["Dark"]["Background"] = "1C2028"
+        # self.theme_cls.colors["Dark"]["AppBar"] = "1C2028"
+        self.theme_cls.colors["Dark"]["StatusBar"] = "1C2028"
+        self.theme_cls.colors["Dark"]["CardsDialogs"] = "1C2028"
+        # self.theme_cls.colors["Dark"]["FlatButtonDown"] = "1C2028"
+        self.root.ids.toolbar.md_bg_color = get_color_from_hex("1C2028")
+        self.root.ids.bottom_Appbar.md_bg_color = get_color_from_hex("1C2028")
+        self.root.ids.nav_drawer.md_bg_color = get_color_from_hex("1C2028")
+
+    def add_files(self, path_list):
+        for file in self.db_manager.insertFiles(path_list):
+            self.sharedFiles.files.append(file)
+            self.root.ids.selection_list.add_widget(MyItem(path=file[0]))
+
+    @classmethod
+    def loadFiles(cls, self):
+        for file in cls.db_manager.getAllFiles():
+            self.sharedFiles.files.append((file[1], file[2]))
+            self.root.ids.selection_list.add_widget(MyItem(path=file[1]))
 
     def build(self):
         self.theme_cls.theme_style = "Dark"
@@ -215,20 +233,34 @@ class WebShare(MDApp):
 
     def on_start(self):
         self.root.ids.nav_drawer.set_state("close")
-        btn = MyButton(self)
-        self.root.ids.toolbar.add_widget(btn)
+        self.root.ids.toolbar.add_widget(MyButton(self))
+        self.root.ids.toolbar.title = "[color=#62acce]Webshare[/color]"
+        self.colors_definition()
+        self.loadFiles(self)
 
     def on_float_button_click(self, button):
         button.action_button.disabled = True
 
-        def on_sccss(requests, result):
+        def on_success(requests, result):
             button.action_button.disabled = False
-            print(result)
+            Snackbar(
+                text="[color=#ddbb34]Server is running![/color]",
+                snackbar_x="10dp",
+                snackbar_y="10dp",
+                size_hint_x=(Window.width - (dp(10) * 2)) / Window.width
+            ).open()
 
-        def on_fail(requests, result):
+        def on_failure(requests, result):
             button.action_button.disabled = False
+            Snackbar(
+                text="[color=#ddbb34]Server is not running![/color]",
+                snackbar_x="10dp",
+                snackbar_y="10dp",
+                size_hint_x=(Window.width - (dp(10) * 2)) / Window.width
+            ).open()
 
-        UrlRequest("http://" + self.sharedFiles.host + "/isConnected", on_success=on_sccss, on_failure=on_fail, on_error=on_fail)
+        UrlRequest("http://" + self.sharedFiles.host + "/isConnected", on_success=on_success, on_failure=on_failure,
+                   on_error=on_failure)
 
     def show_custom_bottom_sheet(self):
         self.custom_sheet = MDCustomBottomSheet(screen=Factory.ContentCustomSheet(), radius_from="top")
@@ -237,6 +269,7 @@ class WebShare(MDApp):
     def change_theme(self):
         if self.theme_cls.theme_style == "Light":
             self.theme_cls.theme_style = "Dark"
+            self.colors_definition()
         elif self.theme_cls.theme_style == "Dark":
             self.theme_cls.theme_style = "Light"
 
@@ -254,7 +287,7 @@ class WebShare(MDApp):
             md_bg_color = (0, 0, 0, 1)
             left_action_items = [["menu"]]
             right_action_items = [["magnify"], ["dots-vertical"]]
-            self.root.ids.toolbar.title = "Inbox"
+            self.root.ids.toolbar.title = "Webshare"
 
         Animation(md_bg_color=md_bg_color, d=0.2).start(self.root.ids.toolbar)
         self.root.ids.toolbar.left_action_items = left_action_items
@@ -271,17 +304,13 @@ class WebShare(MDApp):
                 len(instance_selection_list.get_selected_list_items())
             )
 
-    # @staticmethod
-    # def get_icon_from_filename(path):
-    #     if os.path.isfile(path):
-    #         # Get icon name
-    #         file = Gio.File(path)
-    #         file_info = file.query_info("standard::icon")
-    #         file_icon = file_info.get_icon().get_names()[0]
-    #         icon_theme = gtk.icon_theme_get_default()
-    #         icon_filename = icon_theme.lookup_icon(file_icon, 50, 0)
-    #         if icon_filename is not None:
-    #             return icon_filename.get_filename()
+    def on_checkbox_active(self, checkbox, value):
+        if value:
+            for check in MyItem.all_items:
+                check.active = True
+        else:
+            for check in MyItem.all_items:
+                check.active = False
 
 
 class MyButton(MDFillRoundFlatButton, TouchBehavior):
@@ -289,10 +318,16 @@ class MyButton(MDFillRoundFlatButton, TouchBehavior):
         super().__init__(**kwargs)
         self.app = app
         self._radius = 6
-        self.text = "Ajouter"
+        self.text = "Add new File"
         self.bold = True
         self.pos_hint = {"center_x": .5, "center_y": .5}
         self.font_name = 'Kanit-SemiBold.ttf'
+
+    def on_enter(self):
+        Animation(size_hint=(.6, .1), d=0.3).start(self)
+
+    def on_leave(self):
+        Animation(size_hint=(.5, .09), d=0.3).start(self)
 
     def on_press(self):
         file_chooser = None
@@ -322,4 +357,78 @@ class ContentNavigationDrawer(MDBoxLayout):
 
 class RightCheckbox(MDSwitch):
     pass
+
+
+class ContentCustomSheet(BoxLayout):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.custom()
+
+    def custom(self):
+        layout = MDGridLayout(cols=2)
+        layout.padding = (dp(20), dp(20))
+
+        # 1st row
+        layout.add_widget(
+            MDLabel(
+                text="Settings",
+                halign="left",
+                size_hint_x=None,
+                width=100,
+                font_name='Kanit-SemiBold.ttf',
+                color="62acce"
+            )
+        )
+        layout.add_widget(
+            MDLabel(
+                halign="left",
+            ))
+
+        # 2nd row
+        layout.add_widget(
+            MDLabel(
+                text="Server status : ",
+                halign="left",
+                size_hint_x=None,
+                width=200,
+                padding=(dp(20), dp(5))
+            )
+        )
+        layout.add_widget(MDLabel(
+            text="active",
+            halign="left",
+        ))
+
+        # 3rd row
+        layout.add_widget(
+            MDLabel(
+                text="Url : ",
+                halign="left",
+                size_hint_x=None,
+                width=200,
+                padding=(dp(20), dp(5))
+            )
+        )
+        layout.add_widget(MDLabel(
+            text=SharedFiles.get_url(),
+            halign="left",
+            color=get_color_from_hex("#91cee3")
+        ))
+
+        # 4th row
+        layout.add_widget(
+            MDLabel(
+                text="Enable authentication",
+                halign="left",
+                size_hint_x=None,
+                width=200,
+                padding=(dp(20), dp(5))
+            )
+        )
+        layout.add_widget(MDSwitch(
+            pos_hint={"center_x": .5, "center_y": .5}
+        ))
+
+        self.add_widget(layout)
+
 # https://www.youtube.com/watch?v=NZde8Xt78Iw
